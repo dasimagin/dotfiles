@@ -1,0 +1,12 @@
+[core]
+    editor = vim
+ 
+[alias]
+    fix = commit -m
+    amend = commit --amend
+
+[color]
+    ui = true
+
+[init]
+    defaultBranch = master
