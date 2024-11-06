@@ -1,0 +1,8 @@
+apt install -yq --no-install-recommends \
+  curl \
+  git \
+  stow \
+  vim  \
+  wget \
+  fzf \
+  zsh
