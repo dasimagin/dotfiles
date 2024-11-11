@@ -1,9 +1,9 @@
 # Dotfiles
 
 
-Bootstrap linux config...
+Bootstrap config...
 ```
-sudo ./bootsrap
+./bootsrap.sh
 ```
 
 ...and make symlinks on dotfiles!

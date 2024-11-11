@@ -1,20 +1,12 @@
 #!/bin/bash
 
-export DEBIAN_FRONTEND=noninteractive
-
-# Install zsh
-apt udpate -q && apt install -yq zsh
-
-chsh -s $(which zsh)
-
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install basic packages
-apt update -q && apt install -yq \
-    fzf \
-    git \
-    htop \
-    stow \
-    tmux \
-    vim \
-    wget
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+  echo "Linux detected..."
+  source ./bootstrap.linux.sh
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+  echo "MacOS detected..."
+  source ./bootstrap.macos.sh
+else
+  echo "Unsupported OS!"
+  exit 1
+fi
