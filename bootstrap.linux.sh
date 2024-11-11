@@ -22,3 +22,5 @@ fi
 # Install basic packages
 sudo apt install -yq \
   curl fzf curl htop stow tmux vim wget
+
+stow -t ${HOME} --override=".*" .

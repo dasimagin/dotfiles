@@ -17,5 +17,4 @@ fi
 brew install \
   curl fzf curl htop stow tmux vim wget
 
-
-
+stow -t ${HOME} --override=".*" .
