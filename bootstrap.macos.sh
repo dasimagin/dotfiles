@@ -17,4 +17,18 @@ fi
 brew install \
   curl fzf curl htop stow tmux vim wget
 
+# Make backup of dotfiles
+for file in $(ls -a | grep -E '^\..*'); do
+  if [ -f "${HOME}/${file}" ]; then
+    if [ -L "${HOME}/${file}" ]; then
+      echo "Removing symlink ${file}..."
+      rm "${HOME}/${file}"
+    else
+      echo "Backing up ${file}..."
+      mv "${HOME}/${file}" "${HOME}/${file}.backup"
+    fi
+  fi
+done
+
+# Stow dotfiles
 stow -t ${HOME} --override=".*" .
