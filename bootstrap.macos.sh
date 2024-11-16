@@ -17,6 +17,17 @@ fi
 brew install \
   curl fzf curl git htop less stow tmux vim wget
 
+# Install dev tools
+brew install \
+  clang \
+  clang-format \
+  clang-tidy \
+  cmake \
+  lldb \
+  make \
+  python3-dev \
+  python3-pip
+
 # Install jetbrains mono font
 brew install --cask font-jetbrains-mono
 

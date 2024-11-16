@@ -30,6 +30,17 @@ wget -qO - "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fz
 sudo apt install -yq \
   curl curl git htop less stow tmux vim wget
 
+# Install dev tools
+sudo apt install -yq \
+  clang \
+  clang-format \
+  clang-tidy \
+  cmake \
+  lldb \
+  make \
+  python3-dev \
+  python3-pip
+
 # Install jetbrains mono font
 sudo apt install -yq fonts-jetbrains-mono
 
