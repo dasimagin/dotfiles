@@ -15,7 +15,7 @@ fi
 
 # Install basic packages
 brew install \
-  curl fzf curl git htop stow tmux vim wget
+  curl fzf curl git htop less stow tmux vim wget
 
 # Install jetbrains mono font
 brew install --cask font-jetbrains-mono
