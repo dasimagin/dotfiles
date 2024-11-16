@@ -28,7 +28,8 @@ wget -qO - "https://github.com/junegunn/fzf/releases/download/v${FZF_VERSION}/fz
 
 # Install basic packages
 sudo apt install -yq \
-  curl curl htop stow tmux vim wget
+# Install jetbrains mono font
+sudo apt install -yq fonts-jetbrains-mono
 
 # Make backup of dotfiles
 for file in $(ls -a | grep -E '^\..*'); do

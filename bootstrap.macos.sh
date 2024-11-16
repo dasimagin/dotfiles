@@ -15,7 +15,8 @@ fi
 
 # Install basic packages
 brew install \
-  curl fzf curl htop stow tmux vim wget
+# Install jetbrains mono font
+brew install --cask font-jetbrains-mono
 
 # Make backup of dotfiles
 for file in $(ls -a | grep -E '^\..*'); do
