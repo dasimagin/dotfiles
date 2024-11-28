@@ -70,13 +70,9 @@ bootstrap_linux() {
 
 bootstrap_linux_coder() {
   nix profile install \
-    nixpkgs#clang-format \
-    nixpkgs#clang-tidy \
     nixpkgs#fzf \
     nixpkgs#htop \
-    nixpkgs#lldb \
-    nixpkgs#stow \
-    nixpkgs#tmux \
+    nixpkgs#stow
 
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
