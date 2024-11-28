@@ -30,7 +30,6 @@ bootstrap_macos() {
 
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
-
 }
 
 bootstrap_linux() {
@@ -74,13 +73,16 @@ bootstrap_linux_coder() {
     nixpkgs#htop \
     nixpkgs#stow
 
+  export PATH="$HOME/.nix-profile/bin:$PATH"
+
+  # what about use nix for all packages?
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
+
 }
 
 prepare_dotfiles() {
-
   # Make backup of dotfiles
   for file in $(ls -a | grep -E '^\..*'); do
     if [ -f "${HOME}/${file}" ]; then
@@ -96,7 +98,6 @@ prepare_dotfiles() {
 
   # Stow dotfiles
   stow -t ${HOME} --override=".*" .
-
 }
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
