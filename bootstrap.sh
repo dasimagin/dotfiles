@@ -53,6 +53,10 @@ bootstrap_linux() {
     curl git htop less stow tmux vim wget
 
   # Install dev tools
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+  sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+  sudo apt update -q
+
   sudo apt install -yq \
     clang \
     clang-format \
@@ -61,10 +65,14 @@ bootstrap_linux() {
     lldb \
     make \
     python3-dev \
-    python3-pip
+    python3-pip \
+    code
 
   # Install jetbrains mono font
   sudo apt install -yq fonts-jetbrains-mono
+
+  # Install texlive
+  sudo apt install -yq texlive-full
 }
 
 bootstrap_linux_coder() {
