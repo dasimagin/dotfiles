@@ -1,35 +1,34 @@
 #!/bin/bash
 
+BASIC_PKGS="bat curl fzf git htop less stow tmux vim wget"
+DEV_PKGS="clang clang-format clang-tidy cmake lldb make python3-dev python3-pip"
+
 bootstrap_macos() {
-  # Install brew
-  if ! command -v brew &>/dev/null; then
-    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
-
   # Install zsh
-
   # zsh is already default shell on macOS, so we need only to install oh-my-zsh
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
-  # Install basic packages
-  brew install \
-    curl fzf curl git htop less stow tmux vim wget
+  # Install brew
+  if ! command -v brew &>/dev/null; then
+    NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+
+  # Add brew to PATH during bootstrap
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+
+    # Install basic packages
+  brew install ${BASIC_PKGS}
 
   # Install dev tools
-  brew install \
-    clang \
-    clang-format \
-    clang-tidy \
-    cmake \
-    lldb \
-    make \
-    python3-dev \
-    python3-pip
+  brew install ${DEV_PKGS}
 
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
+
+  # Install nnn plugins
+  sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)"
 }
 
 bootstrap_linux() {
@@ -49,34 +48,28 @@ bootstrap_linux() {
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
-  sudo apt install -yq \
-    curl git htop less stow tmux vim wget
+  sudo apt install -yq ${BASIC_PKGS}
 
   # Install dev tools
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
   sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
   sudo apt update -q
 
-  sudo apt install -yq \
-    clang \
-    clang-format \
-    clang-tidy \
-    cmake \
-    lldb \
-    make \
-    python3-dev \
-    python3-pip \
-    code
+  sudo apt install -yq ${DEV_PKGS} code
 
   # Install jetbrains mono font
   sudo apt install -yq fonts-jetbrains-mono
 
   # Install texlive
   sudo apt install -yq texlive-full
+
+  # Install nnn plugins
+  sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)"
 }
 
 bootstrap_linux_coder() {
   nix profile install \
+    nixpkgs#bat \
     nixpkgs#fzf \
     nixpkgs#htop \
     nixpkgs#stow
