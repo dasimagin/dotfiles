@@ -80,7 +80,10 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Brew shellenv
-eval "$(/opt/homebrew/bin/brew shellenv)"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -92,3 +95,5 @@ fi
 if command -v fzf &> /dev/null; then
   source <(fzf --zsh)
 fi
+
+export BAT_THEME="TwoDark"
