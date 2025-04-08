@@ -97,3 +97,11 @@ if command -v fzf &> /dev/null; then
 fi
 
 export BAT_THEME="TwoDark"
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  alias z="/Applications/Zed.app/Contents/MacOS/cli"
+fi
+
+if command -v bazelisk &> /dev/null; then
+  alias bazel="bazelisk"
+fi
