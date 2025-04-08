@@ -10,3 +10,7 @@
 
 [init]
     defaultBranch = master
+
+[user]
+	name = Denis Simagin
+	email = simagin.mail@yandex.ru
