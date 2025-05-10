@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASIC_PKGS="bat curl fzf git htop less stow tmux vim wget"
-DEV_PKGS="clang clang-format clang-tidy cmake lldb make python3-dev python3-pip"
+DEV_PKGS="clang clang-format clang-tidy cmake gh lldb make python3-dev python3-pip"
 
 bootstrap_macos() {
   # Install zsh
@@ -52,7 +52,11 @@ bootstrap_linux() {
 
   # Install dev tools
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-  sudo add-apt-repository -y "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+  sudo add-apt-repository -y "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/vscode stable main"
+
+  wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo apt-key add -
+  sudo add-apt-repository -y "deb [arch=$(dpkg --print-architecture)] https://cli.github.com/packages stable main"
+
   sudo apt update -q
 
   sudo apt install -yq ${DEV_PKGS} code
