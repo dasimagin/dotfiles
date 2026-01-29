@@ -1,6 +1,6 @@
 #!/bin/bash
 
-BASIC_PKGS="bat curl fzf git htop less stow tmux vim wget"
+BASIC_PKGS="bat curl fzf git htop kitty less stow tmux vim wget"
 DEV_PKGS="clang clang-format clang-tidy cmake gh lldb make python3-dev python3-pip"
 
 bootstrap_macos() {

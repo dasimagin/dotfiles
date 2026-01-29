@@ -76,9 +76,6 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
 # Brew shellenv
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -95,6 +92,8 @@ fi
 if command -v fzf &> /dev/null; then
   source <(fzf --zsh)
 fi
+
+export DISABLE_AUTO_TITLE="true"
 
 export BAT_THEME="TwoDark"
 
