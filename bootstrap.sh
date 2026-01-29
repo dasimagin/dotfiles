@@ -74,7 +74,6 @@ bootstrap_linux() {
 bootstrap_linux_coder() {
   nix profile install \
     nixpkgs#bat \
-    nixpkgs#fzf \
     nixpkgs#htop \
     nixpkgs#stow
 
