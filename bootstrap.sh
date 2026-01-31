@@ -1,8 +1,5 @@
 #!/bin/bash
 
-BASIC_PKGS="bat curl fzf git htop kitty less stow tmux vim wget"
-DEV_PKGS="clang clang-format clang-tidy lldb make python3-dev python3-pip"
-
 bootstrap_macos() {
   # Install zsh
   # zsh is already default shell on macOS, so we need only to install oh-my-zsh
@@ -19,13 +16,19 @@ bootstrap_macos() {
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
     # Install basic packages
-  brew install ${BASIC_PKGS}
+  brew install bat curl fzf git htop kitty less stow tmux vim wget
 
   # Install dev tools
-  brew install ${DEV_PKGS}
+  if ! xcode-select -p &>/dev/null; then
+    xcode-select --install
+  fi
+  brew install make python3 clang-format
 
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
+
+  # Clean up all
+  brew cleanup
 }
 
 bootstrap_linux() {
@@ -45,7 +48,7 @@ bootstrap_linux() {
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
-  sudo apt install -yq ${BASIC_PKGS}
+  sudo apt install -yq bat curl fzf git htop kitty less stow tmux vim wget
 
   # Install dev tools
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
@@ -56,13 +59,23 @@ bootstrap_linux() {
 
   sudo apt update -q
 
-  sudo apt install -yq ${DEV_PKGS} code
+  sudo apt install -yq \
+    code \
+    clang \
+    lldb \
+    clang-format \
+    make \
+    python3-dev \
+    python3-pip
 
   # Install jetbrains mono font
   sudo apt install -yq fonts-jetbrains-mono
 
   # Install texlive
   sudo apt install -yq texlive-full
+
+  # Cleanup all
+  sudo autoremove --purge
 }
 
 bootstrap_linux_coder() {
@@ -84,7 +97,7 @@ prepare_dotfiles() {
   # Make backup of dotfiles
   (
     cd dot
-    for file in $(find . -path './.git' -prune -o -type f); do
+    for file in $(find . -prune -o -type f); do
       [[ "$file" == "." || "$file" == ".." ]] && continue
 
       if [ -f "${HOME}/${file}" ]; then
@@ -103,8 +116,42 @@ prepare_dotfiles() {
   )
 }
 
+setup_vscode() {
+  echo "Setting up VS Code..."
+
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    if ! [ -v CODER ]; then
+      VSCODE_CONFIG_DIR="${HOME}/.config/Code/User"
+      sudo apt install -yq code
+    fi
+  elif [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install --cask visual-studio-code
+    VSCODE_CONFIG_DIR="${HOME}/Library/Application Support/Code/User"
+  fi
+
+  DOT_VSCODE_DIR="${PWD}/vscode"
+  CONFIGS="settings.json"
+
+  for file in ${CONFIGS}; do
+    if [ -L "${VSCODE_CONFIG_DIR}/${file}" ]; then
+      echo "Removing symlink ${file}"
+      rm "${VSCODE_CONFIG_DIR}/${file}"
+    else
+      echo "Backing up ${file}..."
+      mv "${VSCODE_CONFIG_DIR}/${file}" "${VSCODE_CONFIG_DIR}/${file}.backup"
+    fi
+
+    ln -sf "${DOT_VSCODE_DIR}/$file" "${VSCODE_CONFIG_DIR}/$file"
+  done
+
+  echo "Install extensions..."
+  comm -23 <(code --list-extensions | sort) <(sort ~/dot/vscode/extensions.txt) | xargs -L 1 code --uninstall-extension
+  cat "${DOT_VSCODE_DIR}/extensions.txt" | xargs -L 1 code --install-extension
+}
+
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
   export DEBIAN_FRONTEND=noninteractive
+  export DOT_VSCODE_DIR="${PWD}/vscode"
 
   if [ -v CODER ]; then
     echo "Coder devcontainer detected"
@@ -122,3 +169,4 @@ else
 fi
 
 prepare_dotfiles
+setup_vscode

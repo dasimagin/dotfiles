@@ -1,0 +1,10 @@
+ms-vscode.cpptools
+ms-vscode-remote.remote-ssh
+ms-python.python
+github.copilot
+github.copilot-chat
+bazelbuild.vscode-bazel
+coder.coder-remote
+redhat.vscode-yaml
+naumovs.color-highlight
+zhuangtongfa.material-theme
