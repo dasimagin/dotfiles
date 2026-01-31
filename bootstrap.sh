@@ -1,7 +1,7 @@
 #!/bin/bash
 
 BASIC_PKGS="bat curl fzf git htop kitty less stow tmux vim wget"
-DEV_PKGS="clang clang-format clang-tidy cmake gh lldb make python3-dev python3-pip"
+DEV_PKGS="clang clang-format clang-tidy lldb make python3-dev python3-pip"
 
 bootstrap_macos() {
   # Install zsh
@@ -26,9 +26,6 @@ bootstrap_macos() {
 
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
-
-  # Install nnn plugins
-  sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)"
 }
 
 bootstrap_linux() {
@@ -66,9 +63,6 @@ bootstrap_linux() {
 
   # Install texlive
   sudo apt install -yq texlive-full
-
-  # Install nnn plugins
-  sh -c "$(curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs)"
 }
 
 bootstrap_linux_coder() {
@@ -88,20 +82,25 @@ bootstrap_linux_coder() {
 
 prepare_dotfiles() {
   # Make backup of dotfiles
-  for file in $(ls -a | grep -E '^\..*'); do
-    if [ -f "${HOME}/${file}" ]; then
-      if [ -L "${HOME}/${file}" ]; then
-        echo "Removing symlink ${file}..."
-        rm "${HOME}/${file}"
-      else
-        echo "Backing up ${file}..."
-        mv "${HOME}/${file}" "${HOME}/${file}.backup"
-      fi
-    fi
-  done
+  (
+    cd dot
+    for file in $(find . -path './.git' -prune -o -type f); do
+      [[ "$file" == "." || "$file" == ".." ]] && continue
 
-  # Stow dotfiles
-  stow -t ${HOME} --override=".*" .
+      if [ -f "${HOME}/${file}" ]; then
+        if [ -L "${HOME}/${file}" ]; then
+          echo "Removing symlink ${file}"
+          rm "${HOME}/${file}"
+        else
+          echo "Backing up ${file}..."
+          mv "${HOME}/${file}" "${HOME}/${file}.backup"
+        fi
+      fi
+    done
+
+    # Stow dotfiles
+    stow -t ${HOME} --override=".*" .
+  )
 }
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
