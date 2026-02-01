@@ -15,17 +15,27 @@ bootstrap_macos() {
   # Add brew to PATH during bootstrap
   eval "$(/opt/homebrew/bin/brew shellenv)"
 
-    # Install basic packages
-  brew install bat curl fzf git htop kitty less stow tmux vim wget
+  # Install python
+  brew install python3
 
-  # Install dev tools
+  # Install basic packages
+  brew install bat curl fzf git htop kitty less make stow tmux vim wget
+
+  # Install C++ toolchain
   if ! xcode-select -p &>/dev/null; then
     xcode-select --install
   fi
-  brew install make python3 clang-format
+
+  brew install clang-format
+
+  # Install bazel
+  brew install bazelisk buildifier
 
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
+
+  # Install OpenAI codex cli
+  brew install --cask codex
 
   # Clean up all
   brew cleanup

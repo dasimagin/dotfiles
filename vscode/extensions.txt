@@ -3,6 +3,7 @@ ms-vscode-remote.remote-ssh
 ms-python.python
 github.copilot
 github.copilot-chat
+openai.chatgpt
 bazelbuild.vscode-bazel
 coder.coder-remote
 redhat.vscode-yaml
