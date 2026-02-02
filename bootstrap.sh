@@ -61,11 +61,11 @@ bootstrap_linux() {
   sudo apt install -yq bat curl fzf git htop kitty less stow tmux vim wget
 
   # Install dev tools
-  wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-  sudo add-apt-repository -y "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/vscode stable main"
+  wget -qO- https://packages.microsoft.com/keys/microsoft.asc \
+    | gpg --dearmor \
+    | sudo tee /usr/share/keyrings/microsoft.gpg > /dev/null
 
-  wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo apt-key add -
-  sudo add-apt-repository -y "deb [arch=$(dpkg --print-architecture)] https://cli.github.com/packages stable main"
+  sudo add-apt-repository -y "deb [arch=$(dpkg --print-architecture)] https://packages.microsoft.com/repos/vscode stable main"
 
   sudo apt update -q
 
@@ -107,17 +107,13 @@ prepare_dotfiles() {
   # Make backup of dotfiles
   (
     cd dot
-    for file in $(find . -prune -o -type f); do
-      [[ "$file" == "." || "$file" == ".." ]] && continue
-
-      if [ -f "${HOME}/${file}" ]; then
-        if [ -L "${HOME}/${file}" ]; then
-          echo "Removing symlink ${file}"
-          rm "${HOME}/${file}"
-        else
-          echo "Backing up ${file}..."
-          mv "${HOME}/${file}" "${HOME}/${file}.backup"
-        fi
+    for file in $(find -type f); do
+      if [ -L "${HOME}/${file}" ]; then
+        echo "Removing symlink ${file}"
+        rm "${HOME}/${file}"
+      elif [ ! -L "${HOME}/${file}" ]; then
+        echo "Backing up ${file}..."
+        mv "${HOME}/${file}" "${HOME}/${file}.backup"
       fi
     done
 
@@ -155,8 +151,8 @@ setup_vscode() {
   done
 
   echo "Install extensions..."
-  comm -23 <(code --list-extensions | sort) <(sort ~/dot/vscode/extensions.txt) | xargs -L 1 code --uninstall-extension
-  cat "${DOT_VSCODE_DIR}/extensions.txt" | xargs -L 1 code --install-extension
+  comm -23 <(code --list-extensions | sort) <(sort "${DOT_VSCODE_DIR}/extensions.txt") | xargs -L 1 code --uninstall-extension
+  cat "${DOT_VSCODE_DIR}/extensions.txt" | xargs -L 1 code --force --install-extension
 }
 
 if [[ "$OSTYPE" == "linux-gnu"* ]]; then
@@ -179,4 +175,5 @@ else
 fi
 
 prepare_dotfiles
+
 setup_vscode
