@@ -107,7 +107,7 @@ prepare_dotfiles() {
   # Make backup of dotfiles
   (
     cd dot
-    for file in $(find -type f); do
+    for file in $(find . -type f); do
       if [ -L "${HOME}/${file}" ]; then
         echo "Removing symlink ${file}"
         rm "${HOME}/${file}"
@@ -123,13 +123,17 @@ prepare_dotfiles() {
 }
 
 setup_vscode() {
-  echo "Setting up VS Code..."
+
+  if [ -v CODER ]; then
+    echo "Skip VSCode setup!"
+    return
+  fi
+
+  echo "VSCode setup..."
 
   if [[ "$OSTYPE" == "linux-gnu"* ]]; then
-    if ! [ -v CODER ]; then
-      VSCODE_CONFIG_DIR="${HOME}/.config/Code/User"
-      sudo apt install -yq code
-    fi
+    VSCODE_CONFIG_DIR="${HOME}/.config/Code/User"
+    sudo apt install -yq code
   elif [[ "$OSTYPE" == "darwin"* ]]; then
     brew install --cask visual-studio-code
     VSCODE_CONFIG_DIR="${HOME}/Library/Application Support/Code/User"
@@ -147,7 +151,7 @@ setup_vscode() {
       mv "${VSCODE_CONFIG_DIR}/${file}" "${VSCODE_CONFIG_DIR}/${file}.backup"
     fi
 
-    ln -sf "${DOT_VSCODE_DIR}/$file" "${VSCODE_CONFIG_DIR}/$file"
+    ln -sf "${DOT_VSCODE_DIR}/${file}" "${VSCODE_CONFIG_DIR}/${file}"
   done
 
   echo "Install extensions..."
@@ -175,5 +179,5 @@ else
 fi
 
 prepare_dotfiles
-
 setup_vscode
+
