@@ -123,7 +123,7 @@ prepare_dotfiles() {
 
 setup_vscode() {
 
-  if [ -v CODER ]; then
+  if [ -n ${CODER:-}]; then
     echo "Skip VSCode setup!"
     return
   fi
