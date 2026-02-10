@@ -26,16 +26,14 @@ bootstrap_macos() {
     xcode-select --install
   fi
 
-  brew install clang-format
-
-  # Install bazel
-  brew install bazelisk buildifier
-
   # Install jetbrains mono font
   brew install --cask font-jetbrains-mono
 
-  # Install OpenAI codex cli
-  brew install --cask codex
+  # dev tools
+  brew install clang-format bazelisk buildifier coder
+
+  # Install AI coding agents
+  brew install --cask codex claude-code
 
   # Clean up all
   brew cleanup
@@ -101,6 +99,7 @@ bootstrap_linux_coder() {
     sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
+  curl -fsSL https://claude.ai/install.sh | bash
 }
 
 prepare_dotfiles() {
