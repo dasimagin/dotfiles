@@ -23,8 +23,11 @@
   "terminal.integrated.fontSize": 12,
   "terminal.integrated.cursorBlinking": true,
   "terminal.integrated.cursorStyle": "underline",
+  "terminal.integrated.scrollback": 100000,
   "editor.stickyScroll.enabled": false,
   "editor.guides.bracketPairsHorizontal": false,
   "editor.formatOnSave": true,
-  "remote.SSH.connectTimeout": 1800
+  "git.blame.editorDecorationEnabled": true,
+  "extensions.ignoreRecommendations": true,
+  "python.terminal.activateEnvironment": false
 }
