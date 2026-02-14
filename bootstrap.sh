@@ -1,10 +1,11 @@
 #!/bin/bash
+set -euo pipefail
 
 bootstrap_macos() {
   # Install zsh
   # zsh is already default shell on macOS, so we need only to install oh-my-zsh
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
   # Install brew
@@ -53,8 +54,13 @@ bootstrap_linux() {
   sudo chsh -s $(which zsh) $(whoami)
 
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
+
+  # Setup locales
+  sudo apt install -yq locales
+  sudo locale-gen en_US.UTF-8 ru_RU.UTF-8
+  sudo update-locale
 
   sudo apt install -yq bat curl fzf git htop kitty less stow tmux vim wget
 
@@ -68,7 +74,6 @@ bootstrap_linux() {
   sudo apt update -q
 
   sudo apt install -yq \
-    code \
     clang \
     lldb \
     clang-format \
@@ -83,20 +88,22 @@ bootstrap_linux() {
   sudo apt install -yq texlive-full
 
   # Cleanup all
-  sudo autoremove --purge
+  sudo apt autoremove --purge
 }
 
 bootstrap_linux_coder() {
   nix profile install \
     nixpkgs#bat \
+    nixpkgs#glibcLocales \
     nixpkgs#htop \
     nixpkgs#stow
 
   export PATH="$HOME/.nix-profile/bin:$PATH"
+  export LOCALE_ARCHIVE="$HOME/.nix-profile/lib/locale/locale-archive"
 
   # what about use nix for all packages?
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+    RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
 
   curl -fsSL https://claude.ai/install.sh | bash
@@ -110,7 +117,7 @@ prepare_dotfiles() {
       if [ -L "${HOME}/${file}" ]; then
         echo "Removing symlink ${file}"
         rm "${HOME}/${file}"
-      elif [ ! -L "${HOME}/${file}" ]; then
+      elif [ -f "${HOME}/${file}" ]; then
         echo "Backing up ${file}..."
         mv "${HOME}/${file}" "${HOME}/${file}.backup"
       fi
@@ -123,7 +130,7 @@ prepare_dotfiles() {
 
 setup_vscode() {
 
-  if [ -n ${CODER:-}]; then
+  if [ -n "${CODER:-}" ]; then
     echo "Skip VSCode setup!"
     return
   fi
@@ -145,7 +152,7 @@ setup_vscode() {
     if [ -L "${VSCODE_CONFIG_DIR}/${file}" ]; then
       echo "Removing symlink ${file}"
       rm "${VSCODE_CONFIG_DIR}/${file}"
-    else
+    elif [ -f "${VSCODE_CONFIG_DIR}/${file}" ]; then
       echo "Backing up ${file}..."
       mv "${VSCODE_CONFIG_DIR}/${file}" "${VSCODE_CONFIG_DIR}/${file}.backup"
     fi

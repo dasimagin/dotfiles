@@ -27,7 +27,7 @@
   "editor.stickyScroll.enabled": false,
   "editor.guides.bracketPairsHorizontal": false,
   "editor.formatOnSave": true,
-  "git.blame.editorDecorationEnabled": true,
   "extensions.ignoreRecommendations": true,
-  "python.terminal.activateEnvironment": false
+  "python.terminal.activateEnvironment": false,
+  "git.blame.editorDecoration.enabled": true,"remote.SSH.remotePlatform": {"coder-vscode.coder.avride.ai--dasimagin--annita.main":"linux","coder-vscode.coder.avride.ai--dasimagin--darina.main":"linux"},"remote.SSH.connectTimeout": 1800
 }
