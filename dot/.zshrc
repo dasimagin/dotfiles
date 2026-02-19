@@ -93,6 +93,18 @@ if command -v fzf &> /dev/null; then
   source <(fzf --zsh)
 fi
 
+# Interactive fuzzy search with ripgrep and fzf
+if command -v rg &> /dev/null && command -v fzf &> /dev/null && command -v bat &> /dev/null; then
+  ff() {
+    rg --column --line-number --no-heading --color=always --smart-case -- "$1" | \
+      fzf --ansi \
+          --delimiter : \
+          --preview 'bat --color=always --highlight-line {2} {1} --style=numbers' \
+          --preview-window 'up,60%,border-bottom,+{2}+3/3' \
+          --bind "change:reload:rg --column --line-number --no-heading --color=always --smart-case -- {q} || true"
+  }
+fi
+
 export DISABLE_AUTO_TITLE="true"
 
 export BAT_THEME="TwoDark"

@@ -20,7 +20,7 @@ bootstrap_macos() {
   brew install python3
 
   # Install basic packages
-  brew install bat curl fzf git htop kitty less make stow tmux vim wget
+  brew install bat curl fzf git htop kitty less make ripgrep stow tmux vim wget
 
   # Install C++ toolchain
   if ! xcode-select -p &>/dev/null; then
@@ -35,6 +35,9 @@ bootstrap_macos() {
 
   # Install AI coding agents
   brew install --cask codex claude-code
+
+  # Install notes/blog tools
+  brew install hugo
 
   # Clean up all
   brew cleanup
@@ -62,7 +65,9 @@ bootstrap_linux() {
   sudo locale-gen en_US.UTF-8 ru_RU.UTF-8
   sudo update-locale
 
-  sudo apt install -yq bat curl fzf git htop kitty less stow tmux vim wget
+  sudo apt install -yq bat curl fzf git htop kitty less ripgrep stow tmux vim wget
+
+  sudo apt install -yq hugo
 
   # Install dev tools
   wget -qO- https://packages.microsoft.com/keys/microsoft.asc \
@@ -94,7 +99,7 @@ bootstrap_linux() {
 bootstrap_linux_coder() {
   nix profile install \
     nixpkgs#bat \
-    nixpkgs#glibcLocales \
+    nixpkgs#ripgrep \
     nixpkgs#htop \
     nixpkgs#stow
 
