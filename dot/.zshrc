@@ -79,7 +79,7 @@ source $ZSH/oh-my-zsh.sh
 export LANG=en_US.UTF-8
 
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path "$HOME/.zcompcache"
+zstyle ':completion:*' cache-path "${HOME}/.zcompcache"
 
 # Brew shellenv
 
@@ -146,3 +146,13 @@ if [ "${CODER:-}" = "true" ]; then
 
   export PATH="/nix/var/nix/profiles/default/bin:$PATH"
 fi
+
+SSH_IDS=(
+  "$HOME/.ssh/github"
+)
+
+for SSH_ID in "${SSH_IDS[@]}"; do
+  if [ -f "$SSH_ID" ]; then
+    ssh-add "$SSH_ID"
+  fi
+done
