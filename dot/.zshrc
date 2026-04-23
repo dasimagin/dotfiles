@@ -70,11 +70,16 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git)
+plugins=(git bazel)
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
+
+export LANG=en_US.UTF-8
+
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path "$HOME/.zcompcache"
 
 # Brew shellenv
 
@@ -115,4 +120,17 @@ fi
 
 if command -v bazelisk &> /dev/null; then
   alias bazel="bazelisk"
+fi
+
+if [ "${CODER:-}" = "true" ]; then
+  export AV_S3_FALLBACK_INSTALLATION=kansas
+  export AV_ALLOWED_S3_INSTALLATIONS=kansas,aws,nebius
+
+  # set default DESYNC_CACHE_PATH in coder
+  export DESYNC_CACHE_PATH="$HOME/.cache/desync"
+
+  # See https://github.com/coder/envbuilder/issues/91
+  unset DOCKER_CONFIG
+
+  export PATH="/nix/var/nix/profiles/default/bin:$PATH"
 fi

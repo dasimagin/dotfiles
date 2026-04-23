@@ -110,8 +110,6 @@ bootstrap_linux_coder() {
   if [ ! -d "${HOME}/.oh-my-zsh" ]; then
     RUNZSH=no sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
   fi
-
-  curl -fsSL https://claude.ai/install.sh | bash
 }
 
 prepare_dotfiles() {
