@@ -126,6 +126,18 @@ if [ "${CODER:-}" = "true" ]; then
   export AV_S3_FALLBACK_INSTALLATION=kansas
   export AV_ALLOWED_S3_INSTALLATIONS=kansas,aws,nebius
 
+  SHELLHISTORY_PATH="/workspaces/.shellhistory"
+  if [ -d "$SHELLHISTORY_PATH" ]; then
+    export PROMPT_COMMAND='history -a' && export HISTFILE="$SHELLHISTORY_PATH/history"
+  elif [ -f "$SHELLHISTORY_PATH" ]; then
+    export PROMPT_COMMAND='history -a' && export HISTFILE="$SHELLHISTORY_PATH"
+  else
+    sudo touch "$SHELLHISTORY_PATH"
+    export PROMPT_COMMAND='history -a' && export HISTFILE="$SHELLHISTORY_PATH"
+  fi
+
+  sudo chown -R vscode:vscode "$SHELLHISTORY_PATH"
+
   # set default DESYNC_CACHE_PATH in coder
   export DESYNC_CACHE_PATH="$HOME/.cache/desync"
 
