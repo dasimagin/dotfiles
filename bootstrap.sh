@@ -99,7 +99,6 @@ bootstrap_linux() {
 bootstrap_linux_coder() {
   nix profile install \
     nixpkgs#bat \
-    nixpkgs#ripgrep \
     nixpkgs#htop \
     nixpkgs#stow
 
